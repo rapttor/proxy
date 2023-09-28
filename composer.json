@@ -1,0 +1,59 @@
+{
+  "name": "rapttor/proxy",
+  "description": "Proxy list retrieve and provide",
+  "keywords": [
+    "php",
+    "proxy",
+    "free",
+    "freeproxy",
+    "free-proxy"
+  ],
+  "homepage": "http://www.rapttor.com/",
+  "type": "library",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "Emir Kurtovic",
+      "email": "rapttor@gmail.com",
+      "homepage": "http://www.rapttor.com/",
+      "role": "Founder and project lead"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/rapttor/proxy/issues?state=open",
+    "wiki": "https://github.com/rapttor/proxy/wiki",
+    "source": "https://github.com/rapttor/proxy.git"
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "rapttor/proxy",
+        "version": "dev-master",
+        "source": {
+          "url": "https://github.com/rapttor/proxy.git",
+          "type": "git",
+          "reference": "master"
+        },
+        "autoload": {
+          "psr-0": {
+            "RapTToR\\Helper": "src"
+          }
+        }
+      }
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/rapttor/helper.git"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "rapttor/helper": "dev-master"
+  },
+  "autoload": {
+    "classmap": [
+      "src/Proxy.php"
+    ]
+  }
+}
