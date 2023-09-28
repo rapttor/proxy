@@ -47,7 +47,7 @@ get one proxy (no parameters required, but can use all of them combines)
 
 ## licence
 
-- DBAD (https://github.com/rapttor/proxy.git/LICENCE)
+- DBAD (https://github.com/rapttor/proxy/blob/master/LICENSE)
 
 ## install 
 
