@@ -37,8 +37,8 @@ get one proxy (no parameters required, but can use all of them combines)
 - unit-Testing with PHPUnit [in progress]
 
 ## changelog 
-- 29. Sep 2023 : First public release
-- 21. Sep 2023 : first draft of the class
+- Sep 29. 2023 : First public release
+- Sep 21. 2023 : first draft of the class
 
 ## links
 
