@@ -369,7 +369,8 @@ class Proxy
             $data = file_get_contents($url);
             if ($data && strlen($data) > 1) {
                 file_put_contents($filename, gzcompress($data));
-                file_put_contents($filename . '.raw', $data);
+                if (self::debug())
+                    file_put_contents($filename . '.raw', $data);
             }
         }
         return $data;

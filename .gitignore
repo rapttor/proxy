@@ -1,5 +1,6 @@
 /.idea/**
 /.idea/*
+/src/cache/*.raw
 vendor/
 composer.lock
 .DS_Store
