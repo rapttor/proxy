@@ -7,6 +7,24 @@ the list will invalidate once a day, and will get re-loaded.
     $p=new \RapTToR\Proxy; $P->loadAll();
 
 ## run/get a proxy: 
+get multiple proxies
+
+    $proxies = (new \RapTToR\Proxy)->getAll(
+        array(
+            "countries"=>array("ca","us),
+            // one or more criteria below:
+            // "speed"=>"100", // all lower response than 100ms
+            // "uptime"=>"90", // all uptime larger than 90%
+            // "anonimity"=>"anonimous", 
+            // "scheme"=>"socks4", 
+        )
+    );
+
+later use
+  
+  $proxy=$proxies(array_rand($proxies));
+
+
 get one proxy (no parameters required, but can use all of them combines)
 
     $proxy = (new \RapTToR\Proxy)->get(
