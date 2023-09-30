@@ -13,6 +13,135 @@ namespace RapTToR;
 - https://www.npmjs.com/package/proxy-list-builder
 - https://github.com/scidam/proxy-list
     https://raw.githubusercontent.com/scidam/proxy-list/master/proxy.json
+
+    Proxy Site – https://www.proxysite.com – One of the good and consistent proxy sites. Supports Youtube and Facebook. Website’s premium plan lets you connect to the internet more securely.
+
+    Hide Me Proxy – https://hide.me/en/proxy – Hide me is known for VPN services but their free web proxy server is also good. Supports 3 counties such as United States, Netherlands and Germany.
+
+    Kproxy – https://kproxy.com – Supports multiple countries. They have list of 10 servers to browse any website anonymously.
+
+    Proxy Free – https://www.proxfree.com/proxy/ – Another free consistent proxy with a clean user interfaceb. Proxy free also supports multiple countries.
+
+    Zend 2 – https://zend2.com
+
+    Proxy Turbo – https://proxyturbo.com
+
+    Hide My Ass Proxy – https://www.hidemyass.com/proxy
+
+    Filter Bypass – https://www.filterbypass.me/
+
+    Proxy Server – https://www.proxyserver.com/
+
+    Free Proxy Server- https://www.freeproxyserver.co/
+
+    Hidester – https://hidester.com/proxy/
+
+    Tunnel Unblock – http://tubeunblock.net/
+
+    Gen Mirror – https://www.genmirror.com/
+
+    Dolopo – http://www.dolopo.net/
+
+    A to Z proxy – https://www.atozproxy.com/
+
+    Nord VPN – https://nordvpn.com/youtube-proxy/
+
+    Zalmos – http://www.zalmos.com/
+
+    ZaceBookPk – http://www.zacebookpk.com/
+
+    A Web Proxy – https://www.awebproxy.com/
+
+    Unblock YT Proxy – http://www.unblockytproxy.com/
+
+    Yellow Proxy – https://www.yellowproxy.net/
+
+    ProxTube – https://proxtube.com
+
+    Panda Shield – https://pandashield.com/
+
+    Home Proxy – https://www.homeproxy.com/
+
+    My Proxy – http://www.my-proxy.com/
+
+    Unblock Videos – https://unblockvideos.com/
+
+    Unblock Book – http://www.unblockbook.biz/
+
+    Proxy List Pro – https://proxylistpro.com
+
+    Proxy Anywhere – https://www.proxy-anywhere.com/
+
+    Undo Filters – https://www.undofilters.com/
+
+    Instant Unblock – http://instantunblock.com
+
+    VPN Book Proxy – http://www.vpnbook.com/webproxy
+
+    Hide Me Bro – https://www.hidemebro.com/
+
+    Web Surf – https://www.websurf.in/
+
+    Whoer – https://whoer.net/webproxy
+
+    Toolur – https://proxy.toolur.com/
+
+    Free Proxy – https://www.freeproxy.asia/
+
+    QuickProx – http://quickprox.com/
+
+    All Unblocked – http://www.allunblocked.com/
+
+    Unblock Access – http://www.unblockaccess.com
+
+    Site 2 Unblock – http://www.site2unblock.com/
+
+    SSL Secure Proxy – https://sslsecureproxy.com/
+
+    Ninja Web – https://ninjaweb.xyz/
+
+    Orange Proxy – https://www.orangeproxy.net/
+
+    Unblock 123 – http://www.unblock123.com/
+
+    Unblock Sites – http://unblock-sites.com
+
+    Vidproxy – http://www.vidproxy.com/
+
+    Unblock Free Proxy – https://unblockfreeproxy.com/
+
+    Ace Proxy – http://aceproxy.com
+
+    Link Me Tube – http://linkmetube.com/
+
+    Ultimate Proxy – http://ultimateproxy.net/
+
+    Proxy Cloud – http://proxycloud.net/
+
+    Free Euro Proxy – http://freeeuroproxy.com/
+
+    Proxy Load – http://proxyload.net/
+
+    2 Fast Server – http://2fastsurfer.com/
+
+    Xite Site – http://xitesite.com
+
+    Stop Censoring Me – https://stopcensoring.me
+
+    SSL Pro – http://sslpro.org
+
+    Proxite – http://proxite.eu/
+
+    Fiber Proxy – http://fiberproxy.net/
+
+    Hide Buzz – http://hidebuzz.us/
+
+    MiniProx – http://miniprox.com/
+
+    Gizlibaglanti – http://gizlibaglanti.com
+
+    Vload – http://vload.net/
+
 - https://www.sslproxies.org  
  */
 
@@ -22,6 +151,25 @@ class Proxy
     public $countries = array("US", "CA", "DE", "IT", "ES", "FR", "GB", "AU", "NZ", "JP", "CN", "NL", "SE", "CH", "AT", "BE", "DK", "FI", "IE", "LU", "NO", "PT", "RU", "TR", "IN", "VN", "KR");
     public $schemes = array("http", "socks4", "socks5");
     protected $instance = null;
+
+    protected $proxyStructure = array(
+        // maximum fields
+        "scheme" => "http|socks4|socks5",
+        "ip" => "x.x.x.x",
+        "port" => "xxxx",
+        "country" => "US|CA|DE|IT|ES|FR|GB|AU|NZ|JP|CN|NL|SE|CH|AT|BE|DK|FI|IE|LU|NO|PT|RU|TR|IN|VN|KR",
+        "username" => "",
+        "password" => "",
+        "ssl" => "0|1",
+        "tor" => "0|1",
+        "anonymity" => "None|Normal|Anonimous|Elite|Transparent",
+        "speed" => "x(ms)",
+        "uptime" => "x(timestamp)",
+        "ping" => "x(ms)",
+        "status" => "0|1",
+        // timestamp of last update
+        "update" => "yyyy-mm-dd hh:mm:ss",
+    );
 
     public static function debug()
     {
@@ -334,10 +482,373 @@ class Proxy
 
     public function loadAll()
     {
-        $this->remoteLoadProxyscrape();
-        $this->remoteLoadFreeProxyList();
-        // $this->remoteLoadProxyNova(); // problems in parsing, need selenium
+        $methods = get_class_methods($this);
+        $loadName = "remoteLoad";
+        foreach ($methods as $method) {
+            //echo substr($method, 0, strlen($loadName)) . "\n";
+            if (substr($method, 0, strlen($loadName)) == $loadName) {
+                if (self::debug())
+                    echo "executing " . $method . "\n";
+                call_user_func(array($this, $method));
+            }
+            $this->saveLocal();
+        }
+        // $this->remoteLoadProxyscrape();
+        // $this->remoteLoadFreeProxyList();
+        // $this->remoteLoadSpyMe();
+        // $this->remoteLoadProxyDaily();
+        // $this->remoteLoadProxyListPlus();
+        // $this->remoteLoadSpysOne();
+        // $this->remoteLoadProxyNova(); 
         return $this->proxies;
+    }
+
+    public static function splitTextToLines($text)
+    {
+        $lines = explode("\n", $text);
+        foreach ($lines as $i => $line) {
+            $lines[$i] = trim($line);
+        }
+        return $lines;
+    }
+
+    public function loadDOM($html)
+    {
+        $DOM = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $DOM->loadHTML($html);
+        $errors = libxml_get_errors();
+        if (self::debug()) {
+            foreach ($errors as $error) {
+                echo '[ERROR]' . json_encode($error) . "\n";
+            }
+        }
+        return $DOM;
+    }
+
+    public function processSpysOne($html, $config, $params)
+    {
+        $currentrun = array();
+        $DOM = new \DOMDocument();
+        $DOM->loadHTML($html);
+        $rows = $DOM->getElementsByTagName("tr");
+        $head = $config["head"];
+        $countries = $config["countries"];
+        for ($i = 0; $i < $rows->length; $i++) {
+            $cols = $rows->item($i)->getElementsbyTagName("td");
+            $row = $params;
+            for ($j = 0; $j < $cols->length; $j++) {
+                if (isset($head[$j]) && $head[$j]) {
+                    $key = (isset($head[$j]) && $head[$j]) ? $head[$j] : $j;
+                    $row[$key] = $cols->item($j)->nodeValue;
+
+                    if ($key == "ip") {
+                        $row[$key] = explode("document.", $row[$key])[0];
+                        $ipport = explode(':', $row[$key]);
+                        if (isset($ipport[1])) {
+                            $row["port"] = $ipport[1];
+                            $row["ip"] = $ipport[0];
+                        }
+                    }
+                    if ($key == "anonymity") {
+                        $temp = $row[$key];
+                        switch ($temp) {
+                            case "HIA":
+                                $row[$key] = "Elite";
+                                break;
+                            case "NOA":
+                                $row[$key] = "None";
+                                break;
+                            case "ANM":
+                                $row[$key] = "Anonymous";
+                                break;
+                        }
+                    }
+                    if ($key == "country") {
+                        $c = strtolower(explode(" (", $row[$key])[0]);
+                        $temp = false;
+                        $strict = false;
+                        foreach ($countries as $keycode => $country) {
+                            if (stripos(strtolower($country["name"]), $c) !== false) {
+                                //$row["Country name"] = $row[$key];
+                                //$row["Country namepart"] = $c;
+                                $temp = $keycode;
+                            }
+                            if ($c == strtolower($country["name"]))
+                                $strict = $keycode;
+                        }
+                        if ($temp)
+                            $row[$key] = $temp;
+                        if ($strict)
+                            $row[$key] = $strict;
+                    }
+                    if ($key == "speed") {
+                        $row[$key] = explode('%', $row[$key])[0];
+                    }
+
+                    if ($key == "uptime") {
+                        //$row["uptime timestamp"] = $row[$key];
+                        $row[$key] = strtotime(explode(" (", $row[$key])[0]);
+                        //$row["timestamp"] = date("d-m-Y H:i:s",$row[$key]);
+                    }
+
+                }
+            }
+            if (isset($row["ip"]) && $this->isValidIP($row["ip"])) {
+                $currentrun[] = $row;
+                $this->addProxy($row);
+            }
+        }
+        return $currentrun;
+    }
+
+    public function remoteLoadSpysOne()
+    {
+        $countries = $this->loadAllCountries();
+        $currentrun = array();
+        $schemas = array(
+            array("scheme" => "socks", "url" => "https://spys.one/en/socks-proxy-list/"),
+            array("scheme" => "http", "url" => "https://spys.one/en/non-anonymous-proxy-list/"),
+            array("scheme" => "https", "url" => "https://spys.one/en/https-ssl-proxy/"),
+            array("scheme" => "http", "url" => "https://spys.one/en/http-proxy-list/"),
+            array("scheme" => "http", "url" => "https://spys.one/en/anonymous-proxy-list/"),
+        );
+        $heads = array(
+            "socks" => array(
+                "ip",
+                "scheme",
+                "anonymity",
+                "country",
+                //hostname
+                false,
+                "latency",
+                false,
+                false,
+                "speed",
+                "uptime",
+                "update",
+            ),
+        );
+
+        // https://spys.one/free-proxy-list/US/
+        foreach ($schemas as $s) {
+            $scheme = $s["scheme"];
+            $url = $s["url"];
+            $html = $this->getCachedUrl($url);
+
+            $processed = $this->processSpysOne(
+                $html,
+                array(
+                    "head" => $heads["socks"],
+                    "countries" => $countries,
+                ),
+                array(
+                    "scheme" => $scheme
+                )
+            );
+            foreach ($processed as $p)
+                $currentrun[] = $p;
+        }
+
+        $countries = $this->countries; foreach ($countries as $c) {
+            $url = "https://spys.one/free-proxy-list/$c/";
+            $html = $this->getCachedUrl($url);
+            $processed = $this->processSpysOne(
+                $html,
+                $heads["socks"],
+                array(
+                    "scheme" => $scheme,
+                    "country" => $c,
+                )
+            );
+            foreach ($processed as $p)
+                $currentrun[] = $p;
+        }
+
+        if (self::debug())
+            var_dump($currentrun);
+        $this->saveLocal();
+        return $currentrun;
+    }
+
+    public function remoteLoadProxyListPlus()
+    {
+        $schemas = array(
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-1"),
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-2"),
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-3"),
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-4"),
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-5"),
+            array("scheme" => "http", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-5"),
+            array("scheme" => "socks", "url" => "https://list.proxylistplus.com/Socks-List-1"),
+            array("scheme" => "socks", "url" => "https://list.proxylistplus.com/Socks-List-2"),
+            array("scheme" => "https", "url" => "https://list.proxylistplus.com/SSL-List-1"),
+            array("scheme" => "https", "url" => "https://list.proxylistplus.com/SSL-List-2"),
+
+            //array("scheme" => "socks", "url" => "https://list.proxylistplus.com/Fresh-HTTP-Proxy-List-2"),
+        );
+        $currentrun = array();
+        foreach ($schemas as $schema) {
+            $scheme = $schema["scheme"];
+            $url = $schema["url"];
+            $html = self::getCachedUrl($url);
+
+            $table = substr($html, stripos($html, '<table border="0" align="center" cellpadding="0" cellspacing="1" class="bg">'), strlen($html));
+            $table = substr($table, 0, stripos($table, "/TABLE>") + 7);
+
+            $DOM = new \DOMDocument();
+            $DOM->loadHTML($table);
+            $rows = $DOM->getElementsByTagName("tr");
+
+            $heads = array(
+                "http" => array(
+                    "country",
+                    "ip",
+                    "port",
+                    "anonimity",
+                    false,
+                    "google",
+                    "https",
+                    false
+                ),
+                "socks" => array(
+                    "country",
+                    "ip",
+                    "port",
+                    "scheme",
+                    false,
+                    "anonimity",
+                    "https",
+                    false
+                ),
+                "https" => array(
+                    "country",
+                    "ip",
+                    "port",
+                    "anonimity",
+                    false,
+                    "google",
+                    "https",
+                    false
+                ),
+
+            );
+            $head = $heads[$scheme];
+            for ($i = 0; $i < $rows->length; $i++) {
+                $cols = $rows->item($i)->getElementsbyTagName("td");
+                $row = array();
+                for ($j = 0; $j < $cols->length; $j++) {
+                    if (isset($head[$j]) && $head[$j]) {
+                        $key = (isset($head[$j]) && $head[$j]) ? $head[$j] : $j;
+                        $row[$key] = $cols->item($j)->nodeValue;
+                        if ($key == "country") {
+                            $td = $cols->item($j);
+                            $src = $td->getElementsbyTagName("img")->item(0)->getAttribute("src");
+                            $src = explode("/", $src);
+                            $src = explode(".", $src[2]);
+                            $row[$key] = strtoupper($src[0]);
+                        }
+                        if ($row[$key] == "no")
+                            $row[$key] = 0;
+                        if ($row[$key] == "yes")
+                            $row[$key] = 1;
+                        if (
+                            isset($row) && is_array($row)
+                            &&
+                            ((isset($row[0]) && $this->isValidIP($row[0]) ||
+                                (isset($row["ip"]) && $this->isValidIP($row["ip"])))
+                            )
+                        ) {
+                            $row["scheme"] = $scheme;
+                            $this->addProxy($row);
+                            $currentrun[] = $row;
+                        }
+                    }
+
+                }
+                //echo "\n";
+            }
+            $this->saveLocal();
+        }
+        if (self::debug())
+            var_dump($currentrun);
+        return $currentrun;
+    }
+
+    public function remoteLoadProxyDaily()
+    {
+        $currentrun = array();
+        $url = "https://proxy-daily.com/";
+        $className = "freeProxyStyle";
+        $scheme = "http";
+        $html = self::getCachedUrl($url);
+        $lines = $this->splitTextToLines($html);
+        foreach ($lines as $line) {
+            if (stripos($line, $className) !== false && stripos($line, "Socks4") !== false)
+                $scheme = "socks4";
+            if (stripos($line, $className) !== false && stripos($line, "Socks5") !== false)
+                $scheme = "socks5";
+            $p = explode(":", $line);
+            if ($this->isValidIP($p[0])) {
+                $record = array("scheme" => $scheme, "ip" => $p[0], "port" => $p[1]);
+                $this->addProxy($record);
+                $currentrun[] = $record;
+            }
+        }
+        $this->saveLocal();
+        return $currentrun;
+    }
+
+    public function remoteLoadSpyMe()
+    {
+        $schemes = array(
+            array("scheme" => "http", "url" => "http://spys.me/proxy.txt"),
+            array("scheme" => "socks4", "url" => "https://spys.me/socks.txt"),
+        );
+        $currentrun = array();
+        foreach ($schemes as $s) {
+            $scheme = $s["scheme"];
+            $url = $s["url"];
+
+            $data = $this->getCachedUrl($url);
+            $lines = $this->splitTextToLines($data);
+            $line = "119.110.212.150:9080 TH-A! + ";
+            foreach ($lines as $line) {
+                $d = explode(" ", $line);
+                $p = explode(":", $d[0]);
+
+                if ($this->isValidIP($p[0])) {
+                    $c = false;
+                    if (isset($d[1]))
+                        $c = explode("-", $d[1]);
+
+
+                    $a = "None";
+                    if (stripos($c[1], "A") !== false) {
+                        $a = "Anonymous";
+                    }
+                    if (stripos($c[1], "H") !== false) {
+                        $a = "Elite";
+                    }
+                    $s = (isset($c[2]) && $c[2] == "S") ? 1 : 0;
+                    $record = array(
+                        "scheme" => $scheme,
+                        "ip" => $p[0],
+                        "port" => $p[1],
+                        "country" => $c[0],
+                        "anonimity" => $a,
+                        "ssl" => $s,
+                        "google" => (isset($d[2]) && $d[2] == "+") ? "1" : "0",
+                    );
+                    $this->addProxy($record);
+                    $currentrun[] = $record;
+                }
+            } // each line
+            $this->saveLocal();
+        } // schemes
+        if (self::debug())
+            var_dump($currentrun);
+        return $currentrun;
     }
 
     public function loadAllCountries()
@@ -351,24 +862,88 @@ class Proxy
         return $countries;
     }
 
-    public static function getCachedUrl($url, &$forced = false)
+    public static function postCached($url, $parameters = array(), &$forced = false)
     {
-        $key = sha1($url);
-        if (!is_dir(__DIR__ . "/cache"))
-            @mkdir(__DIR__ . "/cache");
-        $filename = __DIR__ . "/cache/" . $key;
+        $key = self::getCacheKey($url);
+        $data = self::getCache($key);
 
-        $data = false;
-        if (is_file($filename)) {
-            $data = gzuncompress(file_get_contents($filename));
-        }
         if (!$data || $forced) {
             if (self::debug())
                 echo "Loading remotely:" . $url . "\n";
             $forced = true;
-            $data = file_get_contents($url);
-            if ($data && strlen($data) > 1) {
-                file_put_contents($filename, gzcompress($data));
+        }
+        $postdata = http_build_query(
+            $parameters,
+        );
+
+        $opts = array(
+            'http' =>
+                array(
+                    'method' => 'POST',
+                    'header' => 'Content-Type: application/x-www-form-urlencoded',
+                    'content' => $postdata
+                )
+        );
+
+        $context = stream_context_create($opts);
+        $result = file_get_contents($url, false, $context);
+
+        if ($result && strlen($result) > 1) {
+            $data = $result;
+            $filename = self::setCache($key, $data);
+            if (self::debug())
+                file_put_contents($filename . '.raw', $data);
+        }
+        return $result;
+    }
+
+    public static function getCacheFile($key)
+    {
+        if (!is_dir(__DIR__ . "/cache"))
+            @mkdir(__DIR__ . "/cache");
+        $filename = __DIR__ . "/cache/" . $key;
+        return $filename;
+    }
+
+    public static function getCacheKey($data)
+    {
+        if (is_array($data))
+            $data = json_encode($data);
+        return sha1($data);
+    }
+
+    public static function setCache($key, $data)
+    {
+        $filename = self::getCacheFile($key);
+        if (!is_scalar($data))
+            $data = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $data = gzcompress($data);
+        file_put_contents($filename, $data);
+        return $filename;
+    }
+
+    public static function getCache($key)
+    {
+        $filename = self::getCacheFile($key);
+        if (file_exists($filename))
+            return gzuncompress(file_get_contents($filename));
+        else
+            return false;
+    }
+
+    public static function getCachedUrl($url, &$forced = false)
+    {
+        $key = self::getCacheKey($url);
+        $data = self::getCache($key);
+
+        if (!$data || $forced) {
+            if (self::debug())
+                echo "Loading remotely:" . $url . "\n";
+            $forced = true;
+            $result = file_get_contents($url);
+            if ($result && strlen($result) > 1) {
+                $data = $result;
+                $filename = self::setCache($key, $data);
                 if (self::debug())
                     file_put_contents($filename . '.raw', $data);
             }
@@ -438,7 +1013,7 @@ class Proxy
         return $currentrun;
     }
 
-    public function remoteLoadProxyNova()
+    public function notworking_remoteLoadProxyNova() // problems in parsing, need selenium
     {
         $errors = array();
         $currentrun = array();
@@ -452,16 +1027,8 @@ class Proxy
             $table = substr($table, 0, stripos($table, "/table>") + 7);
 
             $table = $html;
-            $DOM = new \DOMDocument();
-            libxml_use_internal_errors(true);
-            $DOM->loadHTML($table);
-            $errors = libxml_get_errors();
-            if (self::debug()) {
-                foreach ($errors as $error) {
-                    echo '[ERROR]' . json_encode($error) . "\n";
-                }
-                // die;
-            }
+            $DOM = $this->loadDOM($table);
+
             $rows = $DOM->getElementsByTagName("tr");
             for ($i = 0; $i < $rows->length; $i++) {
                 $cols = $rows->item($i)->getElementsbyTagName("td");
