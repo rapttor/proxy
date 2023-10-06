@@ -423,9 +423,8 @@ class Proxy
         if (is_file($filename)) {
             $data = file_get_contents($filename);
             $json = json_decode($data, true);
-            foreach ($json as $p) {
-                $this->addProxy($p);
-            }
+            foreach ($json as $p)
+                $this->addProxy($p, false);
             $return = $json;
         }
         return $return;
