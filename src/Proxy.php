@@ -598,6 +598,7 @@ class Proxy
                 $this->addProxy($row);
             }
         }
+        $this->saveLocal();
         return $currentrun;
     }
 
@@ -950,7 +951,7 @@ class Proxy
         return $data;
     }
 
-    public function addProxy($p, $autosave = true)
+    public function addProxy($p, $autosave = false)
     {
         if (
             is_array($p)
@@ -961,6 +962,10 @@ class Proxy
                 $this->proxies = array();
             foreach ($p as $k => $v)
                 $p[$k] = (is_string($v)) ? trim($v) : $v;
+            if (isset($p["anonymity"])) {
+                $p["anonimity"] = $p["anonymity"];
+                unset($p["anonymity"]);
+            }
             $this->proxies[self::proxyKey($p)] = $p;
             if ($autosave)
                 $this->saveLocal();
@@ -1017,7 +1022,7 @@ class Proxy
         $errors = array();
         $currentrun = array();
         $scheme = "http";
-        $head = array("ip", "port", false, "speed", "uptime", false, "anonymity");
+        $head = array("ip", "port", false, "speed", "uptime", false, "anonimity");
         foreach ($this->countries as $country) {
             $url = "https://www.proxynova.com/proxy-server-list/country-" . strtolower($country);
             $html = $this->getCachedUrl($url);
@@ -1068,12 +1073,12 @@ class Proxy
             array(
                 "scheme" => "http",
                 "url" => "https://free-proxy-list.net/anonymous-proxy.html",
-                "head" => array("ip", "port", "country", false, "anonymity", "google", "https", false)
+                "head" => array("ip", "port", "country", false, "anonimity", "google", "https", false)
             ),
             array(
                 "scheme" => "socks4",
                 "url" => "https://www.socks-proxy.net/",
-                "head" => array("ip", "port", "country", false, false, "anonymity", "https", false)
+                "head" => array("ip", "port", "country", false, false, "anonimity", "https", false)
             ),
         );
         foreach ($domains as $domain) {
@@ -1117,6 +1122,7 @@ class Proxy
                 //echo "\n";
             }
         }
+        $this->saveLocal();
         return $currentrun;
     }
 
@@ -1181,6 +1187,11 @@ class Proxy
                     $criteria[strtolower($k)] == strtolower($v);
                 }
             foreach ($this->proxies as $proxy) {
+                $anonimity = false;
+                if (isset($criteria["anonimity"]))
+                    $anonimity = strtolower($criteria["anonimity"]);
+                if (isset($criteria["anonymity"]))
+                    $anonimity = strtolower($criteria["anonymity"]);
                 if (
                     isset($criteria["scheme"]) && isset($proxy["scheme"])
                     && strtolower($criteria["scheme"]) != strtolower($proxy["scheme"])
@@ -1201,8 +1212,9 @@ class Proxy
                 if (isset($criteria["uptime"]) && isset($proxy["uptime"]) && !((int) $criteria["uptime"] < (int) $proxy["uptime"]))
                     continue;
                 if (
-                    isset($criteria["anonymity"]) && isset($proxy["anonymity"]) &&
-                    !(stripos(strtolower($proxy["anonymity"]), $criteria["anonymity"]) !== false)
+                    !$anonimity ||
+                    (!(stripos(strtolower($proxy["anonymity"]), $anonimity) !== false))
+                    (!(stripos(strtolower($proxy["anonimity"]), $anonimity) !== false))
                 )
                     continue;
                 $matching[] = $proxy;

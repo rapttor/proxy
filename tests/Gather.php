@@ -2,10 +2,13 @@
 require_once(__DIR__ . "/../vendor/autoload.php");
 require_once(__DIR__ . "/../src/Proxy.php");
 defined("DEBUG") || define("DEBUG", 1);
-
 $p = new RapTToR\Proxy;
-echo "Total: " . count($p->proxies) . "\n";
-$p->loadAll();
+echo "<pre>";
+// load remote: 
+// $all = $p->loadAll();
+$all = $p->loadLocal();
+echo json_encode($all, JSON_PRETTY_PRINT + JSON_UNESCAPED_UNICODE);
+echo "<br/>\n Total: " . count($all) . "\n\n<br/>\n";
 
 //$p->remoteLoadSpyMe();
 //$p->remoteLoadProxyDaily();
